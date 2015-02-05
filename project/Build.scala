@@ -87,6 +87,9 @@ object Dependencies {
   // If the scope is provided;test, as in scalatra examples then gen-idea generates the incorrect scope (test).
   // As provided implies test, so is enough here.
   lazy val servletApiProvided = "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" % "provided" artifacts Artifact("javax.servlet", "jar", "jar")
+
+  // supler - this is the important part
+  lazy val supler = "com.softwaremill" %% "supler" % "0.2.0"
 }
 
 object BootzookaBuild extends Build {
@@ -126,7 +129,7 @@ object BootzookaBuild extends Build {
     file("bootzooka-backend"),
     settings = buildSettings ++ graphSettings ++ webSettings ++ Seq(
       libraryDependencies ++= jodaDependencies ++ slickOnH2Stack ++ scalatraStack ++
-        Seq(jettyContainer, commonsValidator, javaxMail, typesafeConfig, servletApiProvided, bugsnag))
+        Seq(jettyContainer, commonsValidator, javaxMail, typesafeConfig, servletApiProvided, bugsnag, supler))
       ++ Seq(
       artifactName := { (config: ScalaVersion, module: ModuleID, artifact: Artifact) =>
         "bootzooka." + artifact.extension // produces nice war name -> http://stackoverflow.com/questions/8288859/how-do-you-remove-the-scala-version-postfix-from-artifacts-builtpublished-wi
@@ -166,7 +169,7 @@ object BootzookaBuild extends Build {
     )
   ) dependsOn (ui, backend)
 
-  lazy val uiTests = Project(
+  /*lazy val uiTests = Project(
     "bootzooka-ui-tests",
     file("bootzooka-ui-tests"),
     settings = buildSettings ++ Seq(
@@ -174,5 +177,5 @@ object BootzookaBuild extends Build {
     ) ++ Seq(
       test in Test <<= (test in Test) dependsOn (Keys.`package` in Compile in backend)
     )
-  ) dependsOn dist
+  ) dependsOn dist*/
 }
