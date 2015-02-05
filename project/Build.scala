@@ -92,7 +92,7 @@ object Dependencies {
   lazy val supler = "com.softwaremill" %% "supler" % "0.2.0"
 }
 
-object BootzookaBuild extends Build {
+object SuplerExampleBuild extends Build {
 
   import BuildSettings._
   import Dependencies._
@@ -106,33 +106,33 @@ object BootzookaBuild extends Build {
 
   val updateNpm = baseDirectory map { bd =>
     println("Updating NPM dependencies")
-    haltOnCmdResultError(Process("npm install", bd / ".." / "bootzooka-ui")!)
+    haltOnCmdResultError(Process("npm install", bd / ".." / "supler-example-ui")!)
   }
 
   def gruntTask(taskName: String) = (baseDirectory, streams) map { (bd, s) =>
     val localGruntCommand = "./node_modules/.bin/grunt " + taskName
     def buildGrunt() = {
-      Process(localGruntCommand, bd / ".." / "bootzooka-ui").!
+      Process(localGruntCommand, bd / ".." / "supler-example-ui").!
     }
     println("Building with Grunt.js : " + taskName)
     haltOnCmdResultError(buildGrunt())
   } dependsOn updateNpm
 
   lazy val parent: Project = Project(
-    "bootzooka-root",
+    "supler-example-root",
     file("."),
     settings = buildSettings
   ) aggregate(backend, ui, dist)
 
   lazy val backend: Project = Project(
-    "bootzooka-backend",
-    file("bootzooka-backend"),
+    "supler-example-backend",
+    file("supler-example-backend"),
     settings = buildSettings ++ graphSettings ++ webSettings ++ Seq(
       libraryDependencies ++= jodaDependencies ++ slickOnH2Stack ++ scalatraStack ++
         Seq(jettyContainer, commonsValidator, javaxMail, typesafeConfig, servletApiProvided, bugsnag, supler))
       ++ Seq(
       artifactName := { (config: ScalaVersion, module: ModuleID, artifact: Artifact) =>
-        "bootzooka." + artifact.extension // produces nice war name -> http://stackoverflow.com/questions/8288859/how-do-you-remove-the-scala-version-postfix-from-artifacts-builtpublished-wi
+        "supler-example." + artifact.extension // produces nice war name -> http://stackoverflow.com/questions/8288859/how-do-you-remove-the-scala-version-postfix-from-artifacts-builtpublished-wi
       },
       // We need to include the whole webapp, hence replacing the resource directory
       webappResources in Compile <<= baseDirectory { bd =>
@@ -149,19 +149,19 @@ object BootzookaBuild extends Build {
     ))
 
   lazy val ui = Project(
-    "bootzooka-ui",
-    file("bootzooka-ui"),
+    "supler-example-ui",
+    file("supler-example-ui"),
     settings = buildSettings ++ Seq(
       test in Test <<= (test in Test) dependsOn gruntTask("test")
     )
   )
 
   lazy val dist = Project(
-    "bootzooka-dist",
-    file("bootzooka-dist"),
+    "supler-example-dist",
+    file("supler-example-dist"),
     settings = buildSettings ++ assemblySettings ++ Seq(
       libraryDependencies += jetty,
-      mainClass in assembly := Some("com.softwaremill.bootzooka.Bootzooka"),
+      mainClass in assembly := Some("com.softwaremill.bootzooka.SuplerExample"),
       // We need to include the whole webapp, hence replacing the resource directory
       unmanagedResourceDirectories in Compile <<= baseDirectory { bd => {
         List(bd.getParentFile / backend.base.getName / "src" / "main", bd.getParentFile / ui.base.getName / "dist")
@@ -170,8 +170,8 @@ object BootzookaBuild extends Build {
   ) dependsOn (ui, backend)
 
   /*lazy val uiTests = Project(
-    "bootzooka-ui-tests",
-    file("bootzooka-ui-tests"),
+    "supler-example-ui-tests",
+    file("supler-example-ui-tests"),
     settings = buildSettings ++ Seq(
       libraryDependencies ++= seleniumStack ++ Seq(awaitility, jettyTest, servletApiProvided)
     ) ++ Seq(
