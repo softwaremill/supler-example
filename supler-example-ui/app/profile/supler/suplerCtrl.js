@@ -5,13 +5,29 @@ angular.module('smlBootzooka.profile')
 
         var self = this;
 
-        $scope.formDefinition = $resource('rest/supler/personform', null, null, {});
+        $scope.formRest = $resource('rest/supler/personform', null, null, {});
+
+        $scope.postForm = function(formValue, renderResponseFn, sendErrorFn) {
+            $.ajax({
+                url: 'rest/supler/personform',
+                type: 'POST',
+                data: JSON.stringify(formValue),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: renderResponseFn,
+                error: sendErrorFn
+            });
+            //$scope.formRest.post(JSON.stringify(formValue), renderResponseFn, sendErrorFn)
+        };
 
         $scope.form = new SuplerForm(
-            document.getElementById('person_form_container', {})
-        );
+            document.getElementById('person_form_container'),
+            {
+                send_form_function: $scope.postForm
+            });
 
-        $scope.formDefinition.get(function (data) {
+        $scope.formRest.get(function (data) {
             $scope.form.render(data);
         });
+
     });

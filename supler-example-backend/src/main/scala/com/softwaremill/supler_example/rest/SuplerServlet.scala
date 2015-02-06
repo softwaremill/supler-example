@@ -1,5 +1,7 @@
 package com.softwaremill.supler_example.rest
 
+import org.supler.FormWithObject
+
 
 class SuplerServlet extends JsonServlet {
   override def mappingPath = SuplerServlet.MappingPath
@@ -19,7 +21,9 @@ class SuplerServlet extends JsonServlet {
   }
 
   post("/personform") {
-    personForm(person).process(parsedBody).generateJSON
+    val form = personForm(person).process(parsedBody)
+    println(form.asInstanceOf[FormWithObject[Person]].obj)
+    form.generateJSON
   }
 }
 
