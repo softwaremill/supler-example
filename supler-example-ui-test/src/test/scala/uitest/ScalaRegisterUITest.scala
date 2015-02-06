@@ -1,7 +1,7 @@
 package uitest
 
 import com.jayway.awaitility.scala.AwaitilitySupport
-import com.softwaremill.bootzooka.common.Utils
+import com.softwaremill.supler_example.common.Utils
 import org.fest.assertions.Assertions
 import org.openqa.selenium.support.PageFactory
 import uitest.pages.RegistrationPage

@@ -1,6 +1,6 @@
 package uitest
 
-import com.softwaremill.bootzooka.domain.PasswordResetCode
+import com.softwaremill.supler_example.domain.PasswordResetCode
 import org.fest.assertions.Assertions
 
 import scala.util.Success

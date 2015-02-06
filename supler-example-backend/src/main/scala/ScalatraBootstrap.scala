@@ -1,11 +1,11 @@
 import java.util.Locale
 import javax.servlet.ServletContext
 
-import com.softwaremill.bootzooka.Beans
-import com.softwaremill.bootzooka.common.logging.AsyncErrorReportingLogAppender
-import com.softwaremill.bootzooka.common.logging.bugsnag.BugsnagErrorReporter
-import com.softwaremill.bootzooka.rest._
-import com.softwaremill.bootzooka.rest.swagger.SwaggerServlet
+import com.softwaremill.supler_example.Beans
+import com.softwaremill.supler_example.common.logging.AsyncErrorReportingLogAppender
+import com.softwaremill.supler_example.common.logging.bugsnag.BugsnagErrorReporter
+import com.softwaremill.supler_example.rest._
+import com.softwaremill.supler_example.rest.swagger.SwaggerServlet
 import org.scalatra.{LifeCycle, ScalatraServlet}
 
 /**

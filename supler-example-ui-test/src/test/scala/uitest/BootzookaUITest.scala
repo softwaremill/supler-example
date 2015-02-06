@@ -2,8 +2,8 @@ package uitest
 
 import java.util.concurrent.TimeUnit
 
-import com.softwaremill.bootzooka.service.email.DummyEmailSendingService
-import com.softwaremill.bootzooka.{Beans, EmbeddedJetty, EmbeddedJettyConfig}
+import com.softwaremill.supler_example.service.email.DummyEmailSendingService
+import com.softwaremill.supler_example.{Beans, EmbeddedJetty, EmbeddedJettyConfig}
 import com.typesafe.config.ConfigFactory
 import org.eclipse.jetty.webapp.WebAppContext
 import org.openqa.selenium.firefox.FirefoxDriver

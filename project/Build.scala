@@ -161,7 +161,7 @@ object SuplerExampleBuild extends Build {
     file("supler-example-dist"),
     settings = buildSettings ++ assemblySettings ++ Seq(
       libraryDependencies += jetty,
-      mainClass in assembly := Some("com.softwaremill.bootzooka.SuplerExample"),
+      mainClass in assembly := Some("com.softwaremill.supler_example.SuplerExample"),
       // We need to include the whole webapp, hence replacing the resource directory
       unmanagedResourceDirectories in Compile <<= baseDirectory { bd => {
         List(bd.getParentFile / backend.base.getName / "src" / "main", bd.getParentFile / ui.base.getName / "dist")

@@ -3,7 +3,7 @@ package uitest.pages
 import org.openqa.selenium.{By, WebDriver, WebElement}
 import org.openqa.selenium.support.FindBy
 import uitest.commands.SeleniumCommands
-import com.softwaremill.bootzooka.service.data.UserJson
+import com.softwaremill.supler_example.service.data.UserJson
 
 class EntriesByAuthorsPage(driver: WebDriver) {
   private val sc: SeleniumCommands = new SeleniumCommands(driver)
