@@ -1,6 +1,8 @@
 package com.softwaremill.supler_example.rest
 
+import org.json4s.JsonAST.JString
 import org.supler.FormWithObject
+import org.supler.field.ActionResult
 
 
 class SuplerServlet extends JsonServlet {
@@ -8,12 +10,17 @@ class SuplerServlet extends JsonServlet {
 
   import org.supler.Supler._
 
-  val person = Person("Tomek", "Szymanski", 31)
+  val person = Person("Tomek Szymanski", 31, None, true)
 
   val personForm = form[Person](f => List(
-    f.field(_.firstName),
-    f.field(_.lastName),
-    f.field(_.age)
+    f.field(_.name),
+    f.field(_.age),
+    f.field(_.address).label("Address"),
+    f.field(_.likesChocolate).label("Do you like chocolate?"),
+    f.action("save") { p =>
+      println("Saving person: " + p)
+      ActionResult.custom(JString("Saved"))
+    }.label("Save").validateAll()
   ))
 
   get("/personform") {
@@ -21,9 +28,7 @@ class SuplerServlet extends JsonServlet {
   }
 
   post("/personform") {
-    val form = personForm(person).process(parsedBody)
-    println(form.asInstanceOf[FormWithObject[Person]].obj)
-    form.generateJSON
+    personForm(person).process(parsedBody).generateJSON
   }
 }
 
@@ -31,4 +36,4 @@ object SuplerServlet {
   val MappingPath = "supler"
 }
 
-case class Person(firstName: String, lastName: String, age: Int)
+case class Person(name: String, age: Int, address: Option[String], likesChocolate: Boolean)
