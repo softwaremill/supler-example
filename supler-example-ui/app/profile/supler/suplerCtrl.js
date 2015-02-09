@@ -23,7 +23,13 @@ angular.module('smlBootzooka.profile')
         $scope.form = new SuplerForm(
             document.getElementById('person_form_container'),
             {
-                send_form_function: $scope.postForm
+                send_form_function: $scope.postForm,
+                after_render_function: function() {
+                    $('[name = "dob"]').datepicker({
+                        autoclose: true,
+                        format: 'yyyy-mm-dd'
+                    });
+                }
             });
 
         $scope.formRest.get(function (data) {

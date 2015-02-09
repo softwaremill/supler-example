@@ -49,10 +49,6 @@ object Dependencies {
   val jettyContainer = "org.eclipse.jetty" % "jetty-webapp" % jettyVersion % "container"
   val jettyTest = "org.eclipse.jetty" % "jetty-webapp" % jettyVersion % "test"
 
-  private val jodaTime = "joda-time" % "joda-time" % "2.6"
-  private val jodaConvert = "org.joda" % "joda-convert" % "1.7"
-  lazy val jodaDependencies = Seq(jodaTime, jodaConvert)
-
   private val guava = "com.google.guava" % "guava" % "18.0"
   private val googleJsr305 = "com.google.code.findbugs" % "jsr305" % "3.0.0"
   lazy val commonDependencies = unitTestingStack ++ loggingStack ++ Seq(guava, googleJsr305)
@@ -90,6 +86,9 @@ object Dependencies {
 
   // supler - this is the important part
   lazy val supler = "com.softwaremill" %% "supler" % "0.2.0"
+
+  // joda
+  lazy val nscalatime = "com.github.nscala-time" %% "nscala-time" % "1.8.0"
 }
 
 object SuplerExampleBuild extends Build {
@@ -128,8 +127,8 @@ object SuplerExampleBuild extends Build {
     "supler-example-backend",
     file("supler-example-backend"),
     settings = buildSettings ++ graphSettings ++ webSettings ++ Seq(
-      libraryDependencies ++= jodaDependencies ++ slickOnH2Stack ++ scalatraStack ++
-        Seq(jettyContainer, commonsValidator, javaxMail, typesafeConfig, servletApiProvided, bugsnag, supler))
+      libraryDependencies ++= slickOnH2Stack ++ scalatraStack ++
+        Seq(jettyContainer, commonsValidator, javaxMail, typesafeConfig, servletApiProvided, bugsnag, supler, nscalatime))
       ++ Seq(
       artifactName := { (config: ScalaVersion, module: ModuleID, artifact: Artifact) =>
         "supler-example." + artifact.extension // produces nice war name -> http://stackoverflow.com/questions/8288859/how-do-you-remove-the-scala-version-postfix-from-artifacts-builtpublished-wi
