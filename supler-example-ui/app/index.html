@@ -82,7 +82,8 @@
             </div>
             <div class="collapse navbar-collapse">
                            <ul class="nav navbar-nav" ng-controller="UserSessionCtrl">
-                               <li class="active"><a ui-sref="main">Home</a></li>
+                               <li ui-sref-active="active"><a ui-sref="main">Home</a></li>
+                               <li ui-sref-active="active"><a ui-sref="supler">Supler</a></li>
                            </ul>
                 <ul class="nav navbar-nav navbar-right" ng-controller="UserSessionCtrl">
                     <li ng-show="isNotLogged()"><a id="registerLink" ui-sref="register" class="navbar-link">Register</a></li>
