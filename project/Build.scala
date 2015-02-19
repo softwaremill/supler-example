@@ -10,6 +10,8 @@ object BuildSettings {
 
   val buildSettings = Seq(
 
+    resolvers += "OSS JFrog Artifactory" at "http://oss.jfrog.org/artifactory/oss-snapshot-local",
+
     organization := "com.softwaremill",
     version := "0.0.1-SNAPSHOT",
     scalaVersion := "2.11.4",
@@ -85,7 +87,7 @@ object Dependencies {
   lazy val servletApiProvided = "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" % "provided" artifacts Artifact("javax.servlet", "jar", "jar")
 
   // supler - this is the important part
-  lazy val supler = "com.softwaremill" %% "supler" % "0.2.0"
+  lazy val supler = "com.softwaremill.supler" %% "supler" % "0.3.0-SNAPSHOT"
 
   // joda
   lazy val nscalatime = "com.github.nscala-time" %% "nscala-time" % "1.8.0"
