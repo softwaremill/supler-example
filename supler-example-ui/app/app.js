@@ -24,6 +24,11 @@ angular.module('smlBootzooka.profile', ['ui.router', 'smlBootzooka.session', 'sm
                 controller: 'SuplerCtrl',
                 templateUrl: "profile/supler/supler.html"
             })
+            .state('supler-list', {
+                url: '/supler-list',
+                controller: 'SuplerListCtrl',
+                templateUrl: "profile/supler/supler-list.html"
+            })
             .state('register', {
                 url: '/register',
                 controller: 'RegisterCtrl',

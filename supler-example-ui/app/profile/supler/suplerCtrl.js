@@ -8,16 +8,7 @@ angular.module('smlBootzooka.profile')
         $scope.formRest = $resource('rest/supler/personform', null, null, {});
 
         $scope.postForm = function(formValue, renderResponseFn, sendErrorFn) {
-            $.ajax({
-                url: 'rest/supler/personform',
-                type: 'POST',
-                data: JSON.stringify(formValue),
-                dataType: 'json',
-                contentType: 'application/json; charset=utf-8',
-                success: renderResponseFn,
-                error: sendErrorFn
-            });
-            //$scope.formRest.post(JSON.stringify(formValue), renderResponseFn, sendErrorFn)
+            $scope.formRest.save(JSON.stringify(formValue), renderResponseFn, sendErrorFn);
         };
 
         $scope.form = new SuplerForm(

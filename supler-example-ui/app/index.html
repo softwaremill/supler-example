@@ -46,6 +46,7 @@
     <script type="text/javascript" src="common/filters/truncate.js"></script>
     <script type="text/javascript" src="common/filters/dateFormatFilters.js"></script>
     <script type="text/javascript" src="profile/supler/suplerCtrl.js"></script>
+    <script type="text/javascript" src="profile/supler/suplerListCtrl.js"></script>
     <script type="text/javascript" src="profile/login/loginCtrl.js"></script>
     <script type="text/javascript" src="profile/profile/profileCtrl.js"></script>
     <script type="text/javascript" src="profile/profile/profileService.js"></script>
@@ -87,6 +88,7 @@
                            <ul class="nav navbar-nav" ng-controller="UserSessionCtrl">
                                <li ui-sref-active="active"><a ui-sref="main">Home</a></li>
                                <li ui-sref-active="active"><a ui-sref="supler">Supler</a></li>
+                               <li ui-sref-active="active"><a ui-sref="supler-list">Supler List</a></li>
                            </ul>
                 <ul class="nav navbar-nav navbar-right" ng-controller="UserSessionCtrl">
                     <li ng-show="isNotLogged()"><a id="registerLink" ui-sref="register" class="navbar-link">Register</a></li>

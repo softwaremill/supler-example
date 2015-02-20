@@ -33,7 +33,7 @@ class ScalatraBootstrap extends LifeCycle with Beans {
     mountServlet(new UsersServlet(userService))
     mountServlet(new PasswordRecoveryServlet(passwordRecoveryService, userService))
     mountServlet(new SwaggerServlet)
-    mountServlet(new SuplerServlet)
+    mountServlet(new SuplerServlet(personDao))
 
     context.setAttribute("bootzooka", this)
   }

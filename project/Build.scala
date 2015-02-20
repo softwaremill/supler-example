@@ -87,7 +87,7 @@ object Dependencies {
   lazy val servletApiProvided = "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" % "provided" artifacts Artifact("javax.servlet", "jar", "jar")
 
   // supler - this is the important part
-  lazy val supler = "com.softwaremill.supler" %% "supler" % "0.3.0-SNAPSHOT"
+  lazy val supler = "com.softwaremill.supler" %% "supler" % "0.3.0-SNAPSHOT" changing()
 
   // joda
   lazy val nscalatime = "com.github.nscala-time" %% "nscala-time" % "1.8.0"
