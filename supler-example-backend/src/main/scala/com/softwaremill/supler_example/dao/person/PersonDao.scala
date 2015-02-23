@@ -15,4 +15,6 @@ trait PersonDao {
   def findOne(id: PersonId): Option[Person]
 
   def updatePerson(person: Person)
+
+  def delete(uuid: PersonId)
 }

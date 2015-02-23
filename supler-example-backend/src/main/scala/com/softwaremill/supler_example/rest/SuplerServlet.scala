@@ -29,6 +29,17 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
     }
   }
 
+  implicit val uuidTransformer = new StringTransformer[UUID] {
+    override def serialize(u: UUID) = u.toString
+
+    override def deserialize(s: String) = try {
+      Right(UUID.fromString(s))
+    }
+    catch {
+      case e: IllegalArgumentException => Left("error_custom_illegalUUIDformat")
+    }
+  }
+
   val personForm = form[Person](f => List(
     f.field(_.name).label("Name"),
     f.field(_.lastName).label("Last Name"),
@@ -44,6 +55,7 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
   ))
 
   val personROForm = form[Person](f => List(
+    f.field(_.id).renderHint(asHidden()),
     f.staticField(p => Message(p.name)).label("Name"),
     f.staticField(p => Message(p.lastName)).label("Last Name"),
     f.staticField(p => Message(p.email)).label("E-mail"),
@@ -83,6 +95,10 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
       case None => newPerson.copy(id = entityId) // the person is not saved yet
     }
     personForm(person).process(parsedBody).generateJSON
+  }
+
+  delete("/person/:id") {
+    val person = personDao.delete(UUID.fromString(params("id")))
   }
 
   get("/personlist") {

@@ -29,4 +29,9 @@ class SqlPersonDao(protected val database: SqlDatabase) extends PersonDao with S
     val q = for { p <- persons if p.id === person.id } yield p
     q.update(person)
   }
+
+  override def delete(uuid: PersonId) = db.withTransaction { implicit session =>
+    val q = for { p <- persons if p.id === uuid } yield p
+    q.delete
+  }
 }
