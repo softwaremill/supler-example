@@ -20,7 +20,7 @@ angular.module('smlBootzooka.profile', ['ui.router', 'smlBootzooka.session', 'sm
                 }
             })
             .state('supler', {
-                url: '/supler',
+                url: '/supler?id',
                 controller: 'SuplerCtrl',
                 templateUrl: "profile/supler/supler.html"
             })

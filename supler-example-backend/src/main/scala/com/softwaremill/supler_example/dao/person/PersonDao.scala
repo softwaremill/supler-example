@@ -13,4 +13,6 @@ trait PersonDao {
   def addPerson(person: Person): Person
 
   def findOne(id: PersonId): Option[Person]
+
+  def updatePerson(person: Person)
 }

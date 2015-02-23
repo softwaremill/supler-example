@@ -17,7 +17,16 @@ class SqlPersonDao(protected val database: SqlDatabase) extends PersonDao with S
   }
 
   override def addPerson(person: Person) = db.withTransaction { implicit session =>
-    persons += person
+    if (findOne(person.id).isDefined) {
+      updatePerson(person)
+    } else {
+      persons += person
+    }
     person
+  }
+
+  override def updatePerson(person: Person) = db.withTransaction { implicit session =>
+    val q = for { p <- persons if p.id === person.id } yield p
+    q.update(person)
   }
 }

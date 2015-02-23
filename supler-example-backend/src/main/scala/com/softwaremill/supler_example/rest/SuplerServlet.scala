@@ -6,7 +6,7 @@ import com.softwaremill.supler_example.dao.person.PersonDao
 import com.softwaremill.supler_example.domain.Person
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
-import org.json4s.JsonAST.JString
+import org.json4s.JsonAST.{JObject, JField, JString}
 import org.supler.transformation.StringTransformer
 import org.supler.{Message, FormWithObject}
 import org.supler.field.ActionResult
@@ -29,8 +29,6 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
     }
   }
 
-  val person = Person(UUID.randomUUID(), "Tomek", "Szymanski", "tom@email.com", new DateTime(1983, 4, 6, 0, 0), None)
-
   val personForm = form[Person](f => List(
     f.field(_.name).label("Name"),
     f.field(_.lastName).label("Last Name"),
@@ -50,7 +48,13 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
     f.staticField(p => Message(p.lastName)).label("Last Name"),
     f.staticField(p => Message(p.email)).label("E-mail"),
     f.staticField(p => Message(p.dob)).label("Date of Birth"),
-    f.staticField(p => Message(p.address.getOrElse(""))).label("Address")
+    f.staticField(p => Message(p.address.getOrElse(""))).label("Address"),
+    f.action("Edit"){
+      s => ActionResult.custom(JObject(JField("action", JString("edit")), JField("id", JString(s.id.toString))))
+    }.label("Edit"),
+    f.action("Delete"){
+      s => ActionResult.custom(JObject(JField("action", JString("delete")), JField("id", JString(s.id.toString))))
+    }.label("Delete")
   ))
 
   case class People(people: List[Person])
@@ -60,18 +64,36 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
   ))
 
   get("/personform") {
+    val person = newPerson
+    personForm(person).withMeta("id", person.id.toString).generateJSON
+  }
+
+  get("/personform/:id") {
+    val person = personDao.findOne(UUID.fromString(params("id"))) match {
+      case Some(p) => p
+      case None => newPerson
+    }
     personForm(person).withMeta("id", person.id.toString).generateJSON
   }
 
   post("/personform") {
-    val entityId = personForm.getMeta(parsedBody)("id")
-    println(s"Reading person with ID $entityId")
+    val entityId = UUID.fromString(personForm.getMeta(parsedBody)("id"))
+    val person = personDao.findOne(entityId) match {
+      case Some(p) => p
+      case None => newPerson.copy(id = entityId) // the person is not saved yet
+    }
     personForm(person).process(parsedBody).generateJSON
   }
 
   get("/personlist") {
     personListForm(People(personDao.loadAll)).generateJSON
   }
+
+  post("/personlist") {
+    personListForm(People(personDao.loadAll)).process(parsedBody).generateJSON
+  }
+
+  private def newPerson = Person(UUID.randomUUID(), "", "", "", DateTime.now(), None)
 }
 
 object SuplerServlet {
