@@ -6,12 +6,10 @@ import com.softwaremill.supler_example.dao.person.PersonDao
 import com.softwaremill.supler_example.domain.Person
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
-import org.json4s.JsonAST.{JObject, JField, JString}
-import org.supler.transformation.StringTransformer
-import org.supler.{Message, FormWithObject}
+import org.json4s.JsonAST.{JField, JObject, JString}
+import org.supler.Message
 import org.supler.field.ActionResult
-
-import com.github.nscala_time.time.Imports._
+import org.supler.transformation.StringTransformer
 
 
 class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
@@ -27,17 +25,8 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
     } catch {
       case e: IllegalArgumentException => Left("error_custom_illegalDateFormat")
     }
-  }
 
-  implicit val uuidTransformer = new StringTransformer[UUID] {
-    override def serialize(u: UUID) = u.toString
-
-    override def deserialize(s: String) = try {
-      Right(UUID.fromString(s))
-    }
-    catch {
-      case e: IllegalArgumentException => Left("error_custom_illegalUUIDformat")
-    }
+    override def renderHint = Some(asDate())
   }
 
   val personForm = form[Person](f => List(
@@ -46,7 +35,6 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
     f.field(_.email).label("E-mail"),
     f.field(_.dob).label("Date of Birth"),
     f.field(_.address).label("Address"),
-    f.staticField(p => Message(if ((p.dob + 30.years) < DateTime.now) "You're old" else "You're young")),
     f.action("save") { p =>
       println("Saving person: " + p)
       personDao.addPerson(p)

@@ -23,7 +23,7 @@ angular.module('smlBootzooka.profile')
                 }
             };
 
-            $scope.form = new SuplerForm(
+            $scope.form = new Supler.Form(
                     document.getElementById('person_form_container'),
                     {
                         custom_data_handler: $scope.handleData,

@@ -11,16 +11,10 @@ angular.module('smlBootzooka.profile')
                 $scope.formRest.save(JSON.stringify(formValue), renderResponseFn, sendErrorFn);
             };
 
-            $scope.form = new SuplerForm(
+            $scope.form = new Supler.Form(
                     document.getElementById('person_form_container'),
                     {
-                        send_form_function: $scope.postForm,
-                        after_render_function: function () {
-                            $('[name = "dob"]').datepicker({
-                                autoclose: true,
-                                format: 'yyyy-mm-dd'
-                            });
-                        }
+                        send_form_function: $scope.postForm
                     });
 
             $scope.formRest.get({entityId: $stateParams.id}, function (data) {
