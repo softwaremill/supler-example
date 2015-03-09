@@ -1,9 +1,10 @@
 package com.softwaremill.supler_example.rest
 
-import java.util.UUID
+import java.util.{Objects, UUID}
 
 import com.softwaremill.supler_example.dao.person.PersonDao
 import com.softwaremill.supler_example.domain.Person
+import com.softwaremill.supler_example.form.PersonForm
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 import org.json4s.JsonAST.{JField, JObject, JString}
@@ -29,15 +30,16 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
     override def renderHint = Some(asDate())
   }
 
-  val personForm = form[Person](f => List(
-    f.field(_.name).label("Name"),
-    f.field(_.lastName).label("Last Name"),
-    f.field(_.email).label("E-mail"),
-    f.field(_.dob).label("Date of Birth"),
+  val personForm = form[PersonForm](f => List(
+    f.field(_.name).label("Name") || f.field(_.lastName).label("Last Name"),
+    f.field(_.email).label("E-mail") || f.field(_.dob).label("Date of Birth"),
     f.field(_.address).label("Address"),
+    f.field(_.password).label("Password").renderHint(asPassword()).validate(
+      custom((pass, person) => Objects.equals(pass, person.repeatPassword), (pass, person) => Message("Passwords do not match")))
+      || f.field(_.repeatPassword).renderHint(asPassword()),
     f.action("save") { p =>
       println("Saving person: " + p)
-      personDao.addPerson(p)
+      personDao.addPerson(p.toPerson)
       ActionResult.custom(JString("Saved"))
     }.label("Save").validateAll()
   ))
@@ -65,7 +67,7 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
 
   get("/personform") {
     val person = newPerson
-    personForm(person).withMeta("id", person.id.toString).generateJSON
+    personForm(PersonForm(person)).withMeta("id", person.id.toString).generateJSON
   }
 
   get("/personform/:id") {
@@ -73,7 +75,7 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
       case Some(p) => p
       case None => newPerson
     }
-    personForm(person).withMeta("id", person.id.toString).generateJSON
+    personForm(PersonForm(person)).withMeta("id", person.id.toString).generateJSON
   }
 
   post("/personform") {
@@ -82,7 +84,7 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
       case Some(p) => p
       case None => newPerson.copy(id = entityId) // the person is not saved yet
     }
-    personForm(person).process(parsedBody).generateJSON
+    personForm(PersonForm(person)).process(parsedBody).generateJSON
   }
 
   delete("/person/:id") {
@@ -97,7 +99,7 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
     personListForm(People(personDao.loadAll)).process(parsedBody).generateJSON
   }
 
-  private def newPerson = Person(UUID.randomUUID(), "", "", "", DateTime.now(), None)
+  private def newPerson = Person(UUID.randomUUID(), "", "", "", DateTime.now(), None, "")
 }
 
 object SuplerServlet {

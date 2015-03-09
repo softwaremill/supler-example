@@ -23,8 +23,9 @@ trait SqlPersonSchema {
     def email = column[String]("email")
     def dob = column[DateTime]("dob")
     def address = column[Option[String]]("address")
+    def password = column[String]("password")
 
-    def * = (id, name, lastName, email, dob, address) <>(Person.tupled, Person.unapply)
+    def * = (id, name, lastName, email, dob, address, password) <>(Person.tupled, Person.unapply)
   }
 
 }
