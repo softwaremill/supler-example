@@ -34,6 +34,8 @@
     <script src="../bower_files/moment/moment.js"></script>
     <script src="../bower_files/supler/supler.js"></script>
     <script src="../bower_files/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="../bower_files/jquery-locationpicker-plugin/dist/locationpicker.jquery.js"></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -47,6 +49,7 @@
     <script type="text/javascript" src="common/filters/dateFormatFilters.js"></script>
     <script type="text/javascript" src="profile/supler/suplerCtrl.js"></script>
     <script type="text/javascript" src="profile/supler/suplerListCtrl.js"></script>
+    <script type="text/javascript" src="profile/supler/terrorCtrl.js"></script>
     <script type="text/javascript" src="profile/login/loginCtrl.js"></script>
     <script type="text/javascript" src="profile/profile/profileCtrl.js"></script>
     <script type="text/javascript" src="profile/profile/profileService.js"></script>
@@ -89,6 +92,7 @@
                                <li ui-sref-active="active"><a ui-sref="main">Home</a></li>
                                <li ui-sref-active="active"><a ui-sref="supler">Supler</a></li>
                                <li ui-sref-active="active"><a ui-sref="supler-list">Supler List</a></li>
+                               <li ui-sref-active="active"><a ui-sref="terror">Terror</a></li>
                            </ul>
                 <ul class="nav navbar-nav navbar-right" ng-controller="UserSessionCtrl">
                     <li ng-show="isNotLogged()"><a id="registerLink" ui-sref="register" class="navbar-link">Register</a></li>

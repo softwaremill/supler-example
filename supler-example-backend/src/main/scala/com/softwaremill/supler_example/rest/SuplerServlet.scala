@@ -2,9 +2,11 @@ package com.softwaremill.supler_example.rest
 
 import java.util.{Objects, UUID}
 
+import com.softwaremill.supler_example.dao.forms.TerroristDao
 import com.softwaremill.supler_example.dao.person.PersonDao
 import com.softwaremill.supler_example.domain.Person
-import com.softwaremill.supler_example.form.PersonForm
+import com.softwaremill.supler_example.form.{HowTerrorist, Terrorist, TerroristForm, PersonForm}
+import com.softwaremill.supler_example.supler.Transformers
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 import org.json4s.JsonAST.{JField, JObject, JString}
@@ -18,17 +20,7 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
 
   import org.supler.Supler._
 
-  implicit val dateTimeTransformer = new StringTransformer[DateTime] {
-    override def serialize(t: DateTime) = ISODateTimeFormat.date().print(t)
-
-    override def deserialize(u: String) = try {
-      Right(ISODateTimeFormat.date().parseDateTime(u))
-    } catch {
-      case e: IllegalArgumentException => Left("error_custom_illegalDateFormat")
-    }
-
-    override def renderHint = Some(asDate())
-  }
+  import Transformers._
 
   val personForm = form[PersonForm](f => List(
     f.field(_.name).label("Name") || f.field(_.lastName).label("Last Name"),
@@ -98,6 +90,20 @@ class SuplerServlet(val personDao: PersonDao) extends JsonServlet {
   post("/personlist") {
     personListForm(People(personDao.loadAll)).process(parsedBody).generateJSON
   }
+
+  // ------
+
+  get("/terroristform") {
+    new TerroristForm(
+      new TerroristDao {}).terroristForm(newTerror).generateJSON
+  }
+
+  post("/terroristform") {
+    new TerroristForm(
+      new TerroristDao {}).terroristForm(newTerror).process(parsedBody).generateJSON
+  }
+
+  private def newTerror = new Terrorist(false, new HowTerrorist(0, 0, false, 0, false, 0, Nil))
 
   private def newPerson = Person(UUID.randomUUID(), "", "", "", DateTime.now(), None, "")
 }

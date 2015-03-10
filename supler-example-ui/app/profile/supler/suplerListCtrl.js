@@ -8,6 +8,9 @@ angular.module('smlBootzooka.profile')
             $scope.formRest = $resource('rest/supler/personlist', null, null, {});
             $scope.personRest = $resource('rest/supler/person/:id', null, null, {});
 
+            $scope.lat = null;
+            $scope.long = null;
+
             $scope.postForm = function (formValue, renderResponseFn, sendErrorFn) {
                 $scope.formRest.save(JSON.stringify(formValue), renderResponseFn, sendErrorFn);
             };
@@ -37,4 +40,16 @@ angular.module('smlBootzooka.profile')
             };
 
             $scope.loadForm();
+
+            angular.element('#us2').locationpicker({
+                location: {latitude: 46.15242437752303, longitude: 2.7470703125},
+                radius: 0,
+                inputBinding: {
+                    latitudeInput: angular.element("#us2-lat"),
+                    longitudeInput: angular.element("#us2-lon"),
+                    locationNameInput: angular.element('#us2-address')
+                },
+                enableAutocomplete: true,
+                enableReverseGeocode: true
+            });
         });
